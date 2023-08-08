@@ -1,0 +1,22 @@
+spring:
+  data:
+    mongodb:
+      database: pagamentos
+      host: mongo
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: motor-pagamento
+    retry:
+      topic:
+        attempts: 3
+        max-interval: 10000
+        multiplier: 2
+        initial: 1000
+
+pagamento-atualizado:
+  topic: pagamento-atualizado
+pagamento-efetuado:
+  topic: pagamento-efetuado
+dead-letter:
+  topic: "dead-letter"

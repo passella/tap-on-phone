@@ -1,0 +1,12 @@
+server:
+  port: 8081
+
+logging:
+  level:
+    root: debug
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cadastro
+  kafka:
+    bootstrap-servers: "localhost:29092"

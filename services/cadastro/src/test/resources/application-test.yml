@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: cadastro
+    url: jdbc:postgresql://postgresql:5432/cadastro
+    username: cadastro
+
+rate-limit:
+  limitRefreshPeriod: 10
+  limitForPeriod: 5
+  timeoutDuration: 3
+  maxConcurrentCalls: 2

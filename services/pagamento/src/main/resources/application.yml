@@ -1,0 +1,27 @@
+spring:
+  kafka:
+    bootstrap-servers: "kafka:9092"
+  data:
+    mongodb:
+      database: pagamentos
+      host: mongo
+    redis:
+      host: redis
+      port: 6379
+
+rate-limit:
+  limitRefreshPeriod: 10
+  limitForPeriod: 5
+  timeoutDuration: 3
+  maxConcurrentCalls: 2
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  show-actuator: true
+
+dead-letter:
+  topic: "dead-letter"
+
+big-data:
+  topic: "big-data"

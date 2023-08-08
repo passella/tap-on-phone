@@ -1,0 +1,41 @@
+spring:
+  kafka:
+    bootstrap-servers: "kafka:9092"
+  cloud:
+    openfeign:
+      client:
+        config:
+          dadosPagamento-service:
+            url: http://cadastro:8080/api/v1/devices/
+  data:
+    redis:
+      host: redis
+      port: 6379
+
+rate-limit:
+  limitRefreshPeriod: 10
+  limitForPeriod: 5
+  timeoutDuration: 3
+  maxConcurrentCalls: 2
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
+
+dead-letter:
+  topic: "dead-letter"
+
+pagamento-efetuado:
+  topic: "pagamento-efetuado"
+
+pagamento-atualizado:
+  topic: "pagamento-atualizado"
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  show-actuator: true

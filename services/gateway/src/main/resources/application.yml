@@ -1,0 +1,14 @@
+logging:
+  level:
+    root: debug
+
+rotas:
+  cadastro: http://cadastro:8080/
+  operacao-pagamento: http://operacao-pagamento:8080/
+  pagamento: http://pagamento:8080/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

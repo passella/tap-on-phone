@@ -1,0 +1,25 @@
+spring:
+  kafka:
+    bootstrap-servers: "kafka:9092"
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: cadastro
+    url: jdbc:postgresql://postgresql:5432/cadastro
+    username: cadastro
+
+dead-letter:
+  topic: "dead-letter"
+
+big-data:
+  topic: "big-data"
+
+rate-limit:
+  limitRefreshPeriod: 10
+  limitForPeriod: 5
+  timeoutDuration: 3
+  maxConcurrentCalls: 2
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  show-actuator: true

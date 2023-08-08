@@ -1,0 +1,7 @@
+server:
+  port: 8084
+
+rotas:
+  cadastro: http://localhost:8081/
+  operacao-pagamento: http://localhost:8082/
+  pagamento: http://localhost:8083/
