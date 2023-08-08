@@ -1,0 +1,115 @@
+version: '3'
+services:
+  postgresql:
+    build:
+      context: ./infra/postgresql
+    image: postgresql-cadastro
+    restart: always
+    container_name: postgresql-cadastro
+    environment:
+      POSTGRES_USER: cadastro
+      POSTGRES_PASSWORD: cadastro
+      POSTGRES_DB: cadastro
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  cadastro:
+    build:
+      context: ./services/cadastro
+    image: service-cadastro
+    restart: always
+    container_name: service-cadastro
+    ports:
+      - "8081:8080"
+    volumes:
+      - maven-repo:/root/.m2
+
+  operacao-pagamento:
+    build:
+      context: ./services/operacao-pagamento
+    image: service-operacao-pagamento
+    restart: always
+    container_name: service-operacao-pagamento
+    ports:
+      - "8082:8080"
+    volumes:
+      - maven-repo:/root/.m2
+
+  motor-pagamento:
+    build:
+      context: ./services/motor-pagamento
+    image: service-motor-pagamento
+    restart: always
+    container_name: service-motor-pagamento
+    volumes:
+      - maven-repo:/root/.m2
+
+  pagamento:
+    build:
+      context: ./services/pagamento
+    image: service-pagamento
+    restart: always
+    container_name: service-pagamento
+    ports:
+      - "8083:8080"
+    volumes:
+      - maven-repo:/root/.m2
+
+  gateway:
+    build:
+      context: ./services/gateway
+    image: service-gateway
+    restart: always
+    container_name: service-gateway
+    ports:
+      - "8080:8080"
+    volumes:
+      - maven-repo:/root/.m2
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    container_name: cp-zookeeper
+    restart: always
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "22181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka
+    container_name: cp-kafka
+    restart: always
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:29092"
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+
+  mongo:
+    image: mongo
+    #container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+
+volumes:
+  postgresql-data:
+  maven-repo:
+  mongodb-data:

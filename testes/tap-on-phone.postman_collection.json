@@ -1,0 +1,192 @@
+{
+	"info": {
+		"_postman_id": "cfc9699f-0cee-416c-b526-628591d48a36",
+		"name": "tap-on-phone",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "885360"
+	},
+	"item": [
+		{
+			"name": "Criar Estabelecimento",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nome\": \"Estabelecimento 6\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/cadastro/api/v1/estabelecimentos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cadastro",
+						"api",
+						"v1",
+						"estabelecimentos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criar Device",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nome\": \"Device 4\",\n    \"estabelecimentos\": [\n        \"230a66ab-b3e4-41cd-af09-36c56fb91038\" \n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/cadastro/api/v1/devices",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cadastro",
+						"api",
+						"v1",
+						"devices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Device",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8084/cadastro/api/v1/devices/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8084",
+					"path": [
+						"cadastro",
+						"api",
+						"v1",
+						"devices",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "55df68cc-e6b9-44fe-92f2-c3c388c47c52"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criar Pagamento",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_device\": \"3199f384-d8b2-411d-b40d-14991a0dffb7\",\n    \"valor\": 50.89\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/operacao-pagamento/api/v1/pagamentos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"operacao-pagamento",
+						"api",
+						"v1",
+						"pagamentos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atualizar Pagamento",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_pagamento\": \"aac098db-8296-493c-b654-e9177bc0a222\",\n    \"status\": \"CANCELADO\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/operacao-pagamento/api/v1/pagamentos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"operacao-pagamento",
+						"api",
+						"v1",
+						"pagamentos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obter Pagamentos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/pagamento/api/v1/pagamentos/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"pagamento",
+						"api",
+						"v1",
+						"pagamentos",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "230a66ab-b3e4-41cd-af09-36c56fb91038"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
