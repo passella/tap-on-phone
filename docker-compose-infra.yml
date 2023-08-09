@@ -1,4 +1,5 @@
-version: '3'
+version: '3.9'
+
 services:
   postgresql:
     build:
@@ -14,58 +15,9 @@ services:
       - postgresql-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-  cadastro:
-    build:
-      context: ./services/cadastro
-    image: service-cadastro
-    restart: always
-    container_name: service-cadastro
-    ports:
-      - "8081:8080"
-    volumes:
-      - maven-repo:/root/.m2
-
-  operacao-pagamento:
-    build:
-      context: ./services/operacao-pagamento
-    image: service-operacao-pagamento
-    restart: always
-    container_name: service-operacao-pagamento
-    ports:
-      - "8082:8080"
-    volumes:
-      - maven-repo:/root/.m2
-
-  motor-pagamento:
-    build:
-      context: ./services/motor-pagamento
-    image: service-motor-pagamento
-    restart: always
-    container_name: service-motor-pagamento
-    volumes:
-      - maven-repo:/root/.m2
-
-  pagamento:
-    build:
-      context: ./services/pagamento
-    image: service-pagamento
-    restart: always
-    container_name: service-pagamento
-    ports:
-      - "8083:8080"
-    volumes:
-      - maven-repo:/root/.m2
-
-  gateway:
-    build:
-      context: ./services/gateway
-    image: service-gateway
-    restart: always
-    container_name: service-gateway
-    ports:
-      - "8080:8080"
-    volumes:
-      - maven-repo:/root/.m2
+    networks:
+      - tap-on-phone
+    mem_reservation: 268435456
 
   zookeeper:
     image: confluentinc/cp-zookeeper
@@ -76,6 +28,9 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "22181:2181"
+    networks:
+      - tap-on-phone
+    mem_reservation: 268435456
 
   kafka:
     image: confluentinc/cp-kafka
@@ -93,12 +48,18 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - tap-on-phone
+    mem_reservation: 268435456
 
   redis:
     image: redis:7-alpine
     restart: always
     ports:
       - "6379:6379"
+    networks:
+      - tap-on-phone
+    mem_reservation: 268435456
 
   mongo:
     image: mongo
@@ -108,8 +69,14 @@ services:
       - "27017:27017"
     volumes:
       - mongodb-data:/data/db
+    networks:
+      - tap-on-phone
+    mem_reservation: 268435456
 
 volumes:
   postgresql-data:
-  maven-repo:
   mongodb-data:
+
+networks:
+  tap-on-phone:
+    external: true
