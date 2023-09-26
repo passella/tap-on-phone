@@ -1,0 +1,3 @@
+FROM builder:1.0.0
+COPY pom.xml .
+COPY src ./src

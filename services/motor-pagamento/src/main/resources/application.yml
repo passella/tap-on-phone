@@ -1,22 +1,25 @@
 spring:
   data:
     mongodb:
-      database: pagamentos
-      host: mongo
+      database: ${MONGO_DB_DATABASE}
+      host: ${MONGO_DB_HOST}
   kafka:
-    bootstrap-servers: kafka:9092
+    bootstrap-servers: ${BOOTSTRAP_SERVERS}
     consumer:
       group-id: motor-pagamento
     retry:
       topic:
-        attempts: 3
-        max-interval: 10000
-        multiplier: 2
-        initial: 1000
+        attempts: ${KAFKA_RETRIES}
+        max-interval: ${KAFKA_RETRIES_INTERVAL}
+        multiplier: ${KAFKA_RETRIES_MULTIPLIER}
+        initial: ${KAFKA_RETRIES_INITIAL}
 
 pagamento-atualizado:
   topic: pagamento-atualizado
 pagamento-efetuado:
   topic: pagamento-efetuado
+
 dead-letter:
-  topic: "dead-letter"
+  topic: ${DEAD_LETTER_TOPIC}
+big-data:
+  topic: ${BIG_DATA_TOPIC}

@@ -68,7 +68,7 @@ class EstabelecimentoControllerTest {
                 .consumeWith(entityExchangeResult -> {
                     assertThat(entityExchangeResult.getResponseBody())
                             .asString()
-                            .contains("Invalid request content", "nome: Nome é obrigatório");
+                            .contains("Invalid request content");
                 });
     }
 

@@ -1,4 +1,4 @@
-# **Tap-on-phone**
+# Tap-on-phone
 
 Tap-on-phone é um projeto que permite realizar pagamentos por meio de um dispositivo móvel, usando a tecnologia NFC.
 
@@ -6,47 +6,29 @@ O projeto é dividido nas seguintes aplicações:
 
 * **Gateway**: responsável por rotear as requisições entre as outras aplicações.
 * **Cadastro**: responsável por gerenciar os dados dos estabelecimentos e dos dispositivos.
-* **Operações** Pagamento: responsável por criar e atualizar os pagamentos.
+* **Operações Pagamento**: responsável por criar e atualizar os pagamentos.
 * **Pagamentos**: responsável por consultar os pagamentos de um estabelecimento.
 * **Motor Pagamentos**: responsável por processar os pagamentos e enviar mensagens para o Big Data e o Dead Letter.
 
 ## Pré-requisitos
 
 Para subir a solução completa é necessário ter o Docker e o Docker Compose instalados na máquina.
-Para instalar o Docker, basta seguir a documentação oficial: [https://www.docker.com/](https://www.docker.com/)
 
-**Como executar:**
-Para subir a solução é necessário a criação da rede com o seguinte comando:
+## Instalação Docker
 
-`docker network create -d bridge tap-on-phone`
+Seguir a documentação oficial: [https://www.docker.com/](https://www.docker.com/)
 
-Para subir a solução completa, digite o comando:
+## Como executar
 
-`docker-compose -f docker-compose-infra.yml -f docker-compose-services.yml -p tap-on-phone up -d --build`
+Para gerar as imagens execute o comando: `./build.sh`
 
-Para subir somente a infra, digite o comando:
+Para subir a solução execute o comando: `./run.sh`
 
-`docker-compose -f docker-compose-infra.yml -p infra up -d --build`
+Para gerar as imagens e subir a solução, execute o comando: `./build_run.sh`
 
-Para subir somente os serviços, digite o comando:
+## **Como testar**
 
-`docker-compose -f docker-compose-services.yml -p services up -d --build`
-
-Onde:
-
-* **-f docker-compose.yml:** é para definir o arquivo principal do Docker Compose da solução.
-* **-p tap-on-phone:** para definir o nome do projeto.
-* **up:** para subir a solução. 
-* **-d:** para rodar em segundo plano.
-* **--build:** para construir as imagens.
-
-## Atenção: 
-
-**sempre que alterar algum fonte, use o `--build`.**
-
-### Como testar:
-
-Dentro da pasta testes, existe o arquivo `tap-on-phone.postman_collection.json`, esse arquivo é a coleção do Postman para testar a aplicação.
+Dentro da pasta testes, existe o arquivo tap-on-phone.postman_collection.json, esse arquivo é a coleção do Postman para testar a aplicação.
 
 ### Lista de requisições:
 
@@ -95,16 +77,16 @@ Dentro da pasta testes, existe o arquivo `tap-on-phone.postman_collection.json`,
 
 `curl --location 'http://localhost:8080/pagamento/api/v1/pagamentos/230a66ab-b3e4-41cd-af09-36c56fb91038'`
 
-## Documentação:
+### Documentação
 
 O usuário pode acessar o Swagger diretamente de cada aplicação:
 
-* **Aplicação Cadastro:** http://localhost:8081/webjars/swagger-ui/index.html
-* **Aplicação Operações Pagamento:** http://localhost:8082/webjars/swagger-ui/index.html
-* **Aplicação Pagamento:** http://localhost:8083/webjars/swagger-ui/index.html
+* Aplicação Cadastro: http://localhost:8081/webjars/swagger-ui/index.html
+* Aplicação Operações Pagamento: http://localhost:8082/webjars/swagger-ui/index.html
+* Aplicação Pagamento: http://localhost:8083/webjars/swagger-ui/index.html
 
 Dentro de cada Swagger existem os schemas.
 
-## Observações:
+### Observações
 
-A solução envia mensagens para Big Data e Dead Letter, porém ainda não existe as aplicações que escutam esse tópico.
+A solução envia mensagens para Big Data e Dead Letter, porém ainda não existem as aplicações que escutam esse tópico.

@@ -27,22 +27,22 @@ import java.util.Map;
 @EnableKafka
 @Configuration
 public class KafkaConfig {
-
-    @Value(value = "${spring.kafka.bootstrap-servers}")
-    private String bootstrapAddress;
-
-    @Value(value = "${spring.kafka.consumer.group-id}")
-    private String groupId;
-
-
+    private final String bootstrapAddress;
+    private final String groupId;
     private final ApplicationKafkaRecordInterceptor applicationKafkaRecordInterceptor;
     private final ApplicationKafkaBackOff applicationKafkaBackOff;
     private final ApplicationKafkaConsumerRecordRecoverer applicationKafkaConsumerRecordRecoverer;
 
-    public KafkaConfig(final ApplicationKafkaRecordInterceptor applicationKafkaRecordInterceptor, final ApplicationKafkaBackOff applicationKafkaBackOff, final ApplicationKafkaConsumerRecordRecoverer applicationKafkaConsumerRecordRecoverer) {
+    public KafkaConfig(final ApplicationKafkaRecordInterceptor applicationKafkaRecordInterceptor,
+                       final ApplicationKafkaBackOff applicationKafkaBackOff,
+                       final ApplicationKafkaConsumerRecordRecoverer applicationKafkaConsumerRecordRecoverer,
+                       @Value(value = "${spring.kafka.bootstrap-servers}") final String bootstrapAddress,
+                       @Value(value = "${spring.kafka.consumer.group-id}") final String groupId) {
         this.applicationKafkaRecordInterceptor = applicationKafkaRecordInterceptor;
         this.applicationKafkaBackOff = applicationKafkaBackOff;
         this.applicationKafkaConsumerRecordRecoverer = applicationKafkaConsumerRecordRecoverer;
+        this.bootstrapAddress = bootstrapAddress;
+        this.groupId = groupId;
     }
 
     @Bean
@@ -80,8 +80,6 @@ public class KafkaConfig {
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
         return factory;
     }
-
-
 
 
 }

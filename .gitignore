@@ -1,6 +1,5 @@
 /.idea/
-/services/cadastro/cadastro.iml
-/services/gateway/gateway.iml
-/services/motor-pagamento/motor-pagamento.iml
-/services/operacao-pagamento/operacao-pagamento.iml
-/services/pagamento/pagamento.iml
+/services/*/target/
+/**/*.iml
+/.buid-output/
+/.m2-cache/

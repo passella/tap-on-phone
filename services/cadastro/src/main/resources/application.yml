@@ -1,23 +1,23 @@
 spring:
   kafka:
-    bootstrap-servers: "kafka:9092"
+    bootstrap-servers: ${BOOTSTRAP_SERVERS}
   datasource:
-    driver-class-name: org.postgresql.Driver
-    password: cadastro
-    url: jdbc:postgresql://postgresql:5432/cadastro
-    username: cadastro
+    driver-class-name: ${DATASOURCE_DRIVER_CLASS}
+    password: ${DATASOURCE_PASSWORD}
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
 
 dead-letter:
-  topic: "dead-letter"
+  topic: ${DEAD_LETTER_TOPIC}
 
 big-data:
-  topic: "big-data"
+  topic: ${BIG_DATA_TOPIC}
 
 rate-limit:
-  limitRefreshPeriod: 10
-  limitForPeriod: 5
-  timeoutDuration: 3
-  maxConcurrentCalls: 2
+  limitRefreshPeriod: ${RATE_LIMIT_LIMIT_REFRESH_PERIOD:10}
+  limitForPeriod: ${RATE_LIMIT_LIMIT_FOR_PERIOD:5}
+  timeoutDuration: ${RATE_LIMIT_TIMEOUT_DURATION:3}
+  maxConcurrentCalls: ${RATE_LIMIT_MAX_CONCURRENT_CALLS:2}
 
 springdoc:
   swagger-ui:

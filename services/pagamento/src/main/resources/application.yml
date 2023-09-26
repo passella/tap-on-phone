@@ -1,6 +1,6 @@
 spring:
   kafka:
-    bootstrap-servers: "kafka:9092"
+    bootstrap-servers: ${BOOTSTRAP_SERVERS}
   data:
     mongodb:
       database: pagamentos
