@@ -4,6 +4,8 @@ import br.com.passella.operacaopagamento.domain.model.StatusPagamento;
 import br.com.passella.operacaopagamento.provider.impl.CadastroOpenFeignClient.DeviceResponse;
 import br.com.passella.operacaopagamento.service.PagamentoService;
 import br.com.passella.operacaopagamento.usecase.EfetuarPagamento.EfetuarPagamentoInput;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -21,10 +23,11 @@ public class EfetuarPagamentoProvider {
     public Mono<PagamentoEfetuado> send(final DadosPagamento pagamento) {
         final var pagamentoInput = new PagamentoService.EfetuarPagamentoInput(pagamento, UUID.randomUUID().toString(), StatusPagamento.PENDENTE);
         pagamentoService.send(pagamentoInput);
-        PagamentoEfetuado pagamentoEfetuado = new PagamentoEfetuado(pagamento, pagamentoInput.idPagamento(), pagamentoInput.status());
+        final var pagamentoEfetuado = new PagamentoEfetuado(pagamento, pagamentoInput.idPagamento(), pagamentoInput.status());
         return Mono.just(pagamentoEfetuado);
     }
 
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public record DadosPagamento(DeviceResponse device, EfetuarPagamentoInput pagamento) {
     }
 

@@ -14,11 +14,13 @@ services:
       - postgresql-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - tap-on-phone
     deploy:
       resources:
         limits:
-          memory: 128MB
-          cpus: "0.05"
+          memory: 384mb
+          cpus: "0.25"
 
   zookeeper:
     image: confluentinc/cp-zookeeper
@@ -32,8 +34,10 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128MB
-          cpus: "0.05"
+          memory: 384mb
+          cpus: "0.25"
+    networks:
+      - tap-on-phone
 
   kafka:
     image: confluentinc/cp-kafka
@@ -51,11 +55,14 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
     deploy:
       resources:
         limits:
-          memory: 128MB
-          cpus: "0.05"
+          memory: 768mb
+          cpus: "0.5"
+    networks:
+      - tap-on-phone
 
   redis:
     image: redis:7-alpine
@@ -66,8 +73,10 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128MB
-          cpus: "0.05"
+          memory: 384mb
+          cpus: "0.25"
+    networks:
+      - tap-on-phone
 
   mongo:
     image: mongo
@@ -80,8 +89,10 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128MB
-          cpus: "0.05"
+          memory: 384mb
+          cpus: "0.25"
+    networks:
+      - tap-on-phone
 
   cadastro:
     image: service-cadastro:1.0.0
@@ -91,24 +102,8 @@ services:
       - "8081:8080"
     volumes:
       - maven-repo:/root/.m2
-    environment:
-      DATASOURCE_DRIVER_CLASS: ${DATASOURCE_DRIVER_CLASS}
-      DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
-      DATASOURCE_URL: ${DATASOURCE_URL}
-      DATASOURCE_USERNAME: ${DATASOURCE_USERNAME}
-      BOOTSTRAP_SERVERS: ${BOOTSTRAP_SERVERS}
-      DEAD_LETTER_TOPIC: ${DEAD_LETTER_TOPIC}
-      BIG_DATA_TOPIC: ${BIG_DATA_TOPIC}
-      KAFKA_RETRIES: ${KAFKA_RETRIES}
-      KAFKA_RETRIES_INTERVAL: ${KAFKA_RETRIES_INTERVAL}
-      KAFKA_RETRIES_MULTIPLIER: ${KAFKA_RETRIES_MULTIPLIER}
-      KAFKA_RETRIES_INITIAL: ${KAFKA_RETRIES_INITIAL}
-      RATE_LIMIT_LIMIT_REFRESH_PERIOD: ${RATE_LIMIT_LIMIT_REFRESH_PERIOD}
-      RATE_LIMIT_LIMIT_FOR_PERIOD: ${RATE_LIMIT_LIMIT_FOR_PERIOD}
-      RATE_LIMIT_TIMEOUT_DURATION: ${RATE_LIMIT_TIMEOUT_DURATION}
-      RATE_LIMIT_MAX_CONCURRENT_CALLS: ${RATE_LIMIT_MAX_CONCURRENT_CALLS}
-      MONGO_DB_DATABASE: ${MONGO_DB_DATABASE}
-      MONGO_DB_HOST: ${MONGO_DB_HOST}
+    env_file:
+      - ambiente.env
     depends_on:
       - kafka
       - postgresql
@@ -117,8 +112,10 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128MB
-          cpus: "0.05"
+          memory: 384mb
+          cpus: "0.25"
+    networks:
+      - tap-on-phone
 
   operacao-pagamento:
     image: service-operacao-pagamento:1.0.0
@@ -128,24 +125,8 @@ services:
       - "8082:8080"
     volumes:
       - maven-repo:/root/.m2
-    environment:
-      DATASOURCE_DRIVER_CLASS: ${DATASOURCE_DRIVER_CLASS}
-      DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
-      DATASOURCE_URL: ${DATASOURCE_URL}
-      DATASOURCE_USERNAME: ${DATASOURCE_USERNAME}
-      BOOTSTRAP_SERVERS: ${BOOTSTRAP_SERVERS}
-      DEAD_LETTER_TOPIC: ${DEAD_LETTER_TOPIC}
-      BIG_DATA_TOPIC: ${BIG_DATA_TOPIC}
-      KAFKA_RETRIES: ${KAFKA_RETRIES}
-      KAFKA_RETRIES_INTERVAL: ${KAFKA_RETRIES_INTERVAL}
-      KAFKA_RETRIES_MULTIPLIER: ${KAFKA_RETRIES_MULTIPLIER}
-      KAFKA_RETRIES_INITIAL: ${KAFKA_RETRIES_INITIAL}
-      RATE_LIMIT_LIMIT_REFRESH_PERIOD: ${RATE_LIMIT_LIMIT_REFRESH_PERIOD}
-      RATE_LIMIT_LIMIT_FOR_PERIOD: ${RATE_LIMIT_LIMIT_FOR_PERIOD}
-      RATE_LIMIT_TIMEOUT_DURATION: ${RATE_LIMIT_TIMEOUT_DURATION}
-      RATE_LIMIT_MAX_CONCURRENT_CALLS: ${RATE_LIMIT_MAX_CONCURRENT_CALLS}
-      MONGO_DB_DATABASE: ${MONGO_DB_DATABASE}
-      MONGO_DB_HOST: ${MONGO_DB_HOST}
+    env_file:
+      - ambiente.env
     depends_on:
       - kafka
       - postgresql
@@ -154,8 +135,10 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128MB
-          cpus: "0.05"
+          memory: 384mb
+          cpus: "0.25"
+    networks:
+      - tap-on-phone
 
   motor-pagamento:
     image: service-motor-pagamento:1.0.0
@@ -163,24 +146,8 @@ services:
     container_name: service-motor-pagamento
     volumes:
       - maven-repo:/root/.m2
-    environment:
-      DATASOURCE_DRIVER_CLASS: ${DATASOURCE_DRIVER_CLASS}
-      DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
-      DATASOURCE_URL: ${DATASOURCE_URL}
-      DATASOURCE_USERNAME: ${DATASOURCE_USERNAME}
-      BOOTSTRAP_SERVERS: ${BOOTSTRAP_SERVERS}
-      DEAD_LETTER_TOPIC: ${DEAD_LETTER_TOPIC}
-      BIG_DATA_TOPIC: ${BIG_DATA_TOPIC}
-      KAFKA_RETRIES: ${KAFKA_RETRIES}
-      KAFKA_RETRIES_INTERVAL: ${KAFKA_RETRIES_INTERVAL}
-      KAFKA_RETRIES_MULTIPLIER: ${KAFKA_RETRIES_MULTIPLIER}
-      KAFKA_RETRIES_INITIAL: ${KAFKA_RETRIES_INITIAL}
-      RATE_LIMIT_LIMIT_REFRESH_PERIOD: ${RATE_LIMIT_LIMIT_REFRESH_PERIOD}
-      RATE_LIMIT_LIMIT_FOR_PERIOD: ${RATE_LIMIT_LIMIT_FOR_PERIOD}
-      RATE_LIMIT_TIMEOUT_DURATION: ${RATE_LIMIT_TIMEOUT_DURATION}
-      RATE_LIMIT_MAX_CONCURRENT_CALLS: ${RATE_LIMIT_MAX_CONCURRENT_CALLS}
-      MONGO_DB_DATABASE: ${MONGO_DB_DATABASE}
-      MONGO_DB_HOST: ${MONGO_DB_HOST}
+    env_file:
+      - ambiente.env
     depends_on:
       - kafka
       - postgresql
@@ -189,8 +156,10 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128MB
-          cpus: "0.05"
+          memory: 384mb
+          cpus: "0.25"
+    networks:
+      - tap-on-phone
 
   pagamento:
     image: service-pagamento:1.0.0
@@ -200,24 +169,8 @@ services:
       - "8083:8080"
     volumes:
       - maven-repo:/root/.m2
-    environment:
-      DATASOURCE_DRIVER_CLASS: ${DATASOURCE_DRIVER_CLASS}
-      DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
-      DATASOURCE_URL: ${DATASOURCE_URL}
-      DATASOURCE_USERNAME: ${DATASOURCE_USERNAME}
-      BOOTSTRAP_SERVERS: ${BOOTSTRAP_SERVERS}
-      DEAD_LETTER_TOPIC: ${DEAD_LETTER_TOPIC}
-      BIG_DATA_TOPIC: ${BIG_DATA_TOPIC}
-      KAFKA_RETRIES: ${KAFKA_RETRIES}
-      KAFKA_RETRIES_INTERVAL: ${KAFKA_RETRIES_INTERVAL}
-      KAFKA_RETRIES_MULTIPLIER: ${KAFKA_RETRIES_MULTIPLIER}
-      KAFKA_RETRIES_INITIAL: ${KAFKA_RETRIES_INITIAL}
-      RATE_LIMIT_LIMIT_REFRESH_PERIOD: ${RATE_LIMIT_LIMIT_REFRESH_PERIOD}
-      RATE_LIMIT_LIMIT_FOR_PERIOD: ${RATE_LIMIT_LIMIT_FOR_PERIOD}
-      RATE_LIMIT_TIMEOUT_DURATION: ${RATE_LIMIT_TIMEOUT_DURATION}
-      RATE_LIMIT_MAX_CONCURRENT_CALLS: ${RATE_LIMIT_MAX_CONCURRENT_CALLS}
-      MONGO_DB_DATABASE: ${MONGO_DB_DATABASE}
-      MONGO_DB_HOST: ${MONGO_DB_HOST}
+    env_file:
+      - ambiente.env
     depends_on:
       - kafka
       - postgresql
@@ -226,8 +179,10 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128MB
-          cpus: "0.05"
+          memory: 384mb
+          cpus: "0.25"
+    networks:
+      - tap-on-phone
 
   gateway:
     image: service-gateway:1.0.0
@@ -240,10 +195,15 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128MB
-          cpus: "0.05"
+          memory: 384mb
+          cpus: "0.25"
+    networks:
+      - tap-on-phone
 
 volumes:
   postgresql-data:
   maven-repo:
   mongodb-data:
+
+networks:
+  tap-on-phone:

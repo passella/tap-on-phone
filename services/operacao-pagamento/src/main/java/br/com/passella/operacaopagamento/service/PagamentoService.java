@@ -10,6 +10,7 @@ public interface PagamentoService {
 
     void update(AtualizarStatusInput atualizarStatusInput);
 
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     record EfetuarPagamentoInput(EfetuarPagamentoProvider.DadosPagamento device, String idPagamento, StatusPagamento status) {
     }
 

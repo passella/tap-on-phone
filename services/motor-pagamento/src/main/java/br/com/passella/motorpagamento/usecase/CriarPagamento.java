@@ -4,6 +4,8 @@ import br.com.passella.motorpagamento.domain.model.DadosPagamento;
 import br.com.passella.motorpagamento.domain.model.StatusPagamento;
 import br.com.passella.motorpagamento.repository.PagamentosRepository;
 import br.com.passella.motorpagamento.usecase.converter.PagamentoConverter;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,10 +22,10 @@ public class CriarPagamento {
     public CriarPagamentoOutput execute(final CriarPagamentoInput input) {
         final var pagamentoEntity = pagamentoConverter.toEntity(input);
         final var saved = pagamentosRepository.save(pagamentoEntity);
-        final var output = pagamentoConverter.toOutput(saved);
-        return output;
+        return pagamentoConverter.toOutput(saved);
     }
 
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public record CriarPagamentoInput(DadosPagamento device, String idPagamento, StatusPagamento status) {
     }
 
