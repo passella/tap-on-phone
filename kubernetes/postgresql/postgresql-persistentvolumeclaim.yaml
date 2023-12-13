@@ -1,0 +1,12 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: postgresql-persistentvolumeclaim
+  namespace: tap-on-phone-database
+spec:
+  storageClassName: expandable-database-hostpath
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 3Ki

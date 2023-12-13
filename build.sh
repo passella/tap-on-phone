@@ -18,6 +18,13 @@ chmod +X startup.sh
 
 echo "Ambiente pronto"
 
+echo "Criando imagem postgresql..."
+docker build -f infra/postgresql/Dockerfile -t postgresql-cadastro:latest infra/postgresql/
+echo "Imagem postgresql criada com sucesso"
+echo "Salvando imagem postgresql..."
+docker save -o .buid-output/postgresql-cadastro.tar postgresql-cadastro
+echo "Imagem postgresql salva com sucesso"
+
 echo "Criando imagem base ..."
 docker build -f Dockerfile-basebuilder -t builder:1.0.0 .
 echo "Imagem base criada com sucesso"
