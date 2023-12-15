@@ -1,0 +1,16 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: database-persistent-volume
+  namespace: tap-on-phone-database
+spec:
+  storageClassName: database-storage-class
+  capacity:
+    storage: 1Ki
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/database"
+    type: DirectoryOrCreate
+  persistentVolumeReclaimPolicy: Delete
+  volumeMode: Filesystem
