@@ -3,7 +3,7 @@ kind: StorageClass
 metadata:
   name: database-storage-class
   namespace: tap-on-phone-database
-provisioner: microk8s.io/hostpath
+provisioner: kubernetes.io/nfs
 reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true

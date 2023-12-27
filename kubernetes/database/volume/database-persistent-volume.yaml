@@ -6,11 +6,11 @@ metadata:
 spec:
   storageClassName: database-storage-class
   capacity:
-    storage: 1Ki
+    storage: 1Gi
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  volumeMode: Filesystem
   hostPath:
     path: "/mnt/database"
     type: DirectoryOrCreate
-  persistentVolumeReclaimPolicy: Delete
-  volumeMode: Filesystem
