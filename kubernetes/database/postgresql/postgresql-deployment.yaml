@@ -1,5 +1,5 @@
-apiVersion: apps/v1
 kind: Deployment
+apiVersion: apps/v1
 metadata:
   name: postgres
   namespace: tap-on-phone-database
@@ -13,23 +13,35 @@ spec:
       labels:
         app: postgres
     spec:
+      volumes:
+        - name: postgres-volume
+          persistentVolumeClaim:
+            claimName: database-persistent-volume-claim
       containers:
         - name: postgres
           image: postgres:16.1
-          imagePullPolicy: Always
+          ports:
+            - containerPort: 5432
+              protocol: TCP
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: postgres-secret
                   key: POSTGRES_PASSWORD
-          ports:
-            - containerPort: 5432
+          resources:
+            limits:
+              cpu: '1'
+              memory: 512Mi
+            requests:
+              cpu: 500m
+              memory: 512Mi
           volumeMounts:
             - name: postgres-volume
               mountPath: /var/lib/postgresql/data
       restartPolicy: Always
-      volumes:
-        - name: postgres-volume
-          persistentVolumeClaim:
-            claimName: database-persistent-volume-claim
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
