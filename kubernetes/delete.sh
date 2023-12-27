@@ -2,10 +2,8 @@
 
 echo "Removendo solução ..."
 
-kubectl delete -f database/pgpool/pgpool-service.yaml
-kubectl delete -f database/pgpool/pgpool-stateful-set.yaml
-
 kubectl delete -f database/postgresql/postgresql-service.yaml
+kubectl delete -f database/postgresql/postgresql-autoscaling.yaml
 kubectl delete -f database/postgresql/postgresql-deployment.yaml
 kubectl delete -f database/postgresql/postgresql-password.yaml
 
