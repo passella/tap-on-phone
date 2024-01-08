@@ -4,7 +4,7 @@ metadata:
   name: postgresql
   namespace: tap-on-phone-database
 spec:
-  maxReplicas: 100
+  maxReplicas: 3
   scaleTargetRef:
     kind: Deployment
     name: postgresql

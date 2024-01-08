@@ -1,4 +1,12 @@
 spring:
+  flyway:
+    enabled: false
+    url: ${FLYWAY_URL}
+    user: ${FLYWAY_USER}
+    password: ${FLYWAY_PASSWORD}
+    baseline-on-migrate: true
+    placeholders:
+      cadastro-password: ${DATASOURCE_PASSWORD}
   kafka:
     bootstrap-servers: ${BOOTSTRAP_SERVERS}
   datasource:

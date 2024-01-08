@@ -1,10 +1,8 @@
 #!/bin/bash
 set -e
 
-DIR_ATUAL=$(pwd)
+script_dir=$(dirname $(realpath "$0"))
 
-cd ../build
-./build.sh
+"$script_dir"../buildbuild.sh
 
-cd $DIR_ATUAL
-./run.sh
+"$script_dir"/run.sh

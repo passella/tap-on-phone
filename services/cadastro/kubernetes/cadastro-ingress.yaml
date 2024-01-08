@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: cadastro
+  name: cadastro
+  namespace: tap-on-phone
+spec:
+  rules:
+    - host: cadastro.localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: cadastro
+                port:
+                  number: 80

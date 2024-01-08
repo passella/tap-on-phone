@@ -1,0 +1,2 @@
+GRANT ALL PRIVILEGES ON DATABASE cadastro TO cadastro;
+GRANT ALL PRIVILEGES ON DATABASE cadastro TO postgres;
