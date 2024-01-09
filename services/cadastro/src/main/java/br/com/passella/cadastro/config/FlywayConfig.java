@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Profile;
 
 import javax.sql.DataSource;
 
+@Profile("!no_flyway")
 @Configuration
-@Profile("!test")
 public class FlywayConfig {
 
     private final FlywayProperties flywayProperties;
@@ -27,7 +27,6 @@ public class FlywayConfig {
 
 
     @PostConstruct
-    @Profile("!test")
     public void init() {
         Flyway
                 .configure()

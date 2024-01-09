@@ -1,6 +1,7 @@
 package br.com.passella.cadastro.entrypoint.controller;
 
 import br.com.passella.cadastro.domain.model.EstabelecimentoRequest;
+import br.com.passella.cadastro.utils.ContainersForTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +16,6 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
-import org.testcontainers.containers.PostgreSQLContainer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,35 +26,30 @@ import static org.assertj.core.api.Assertions.assertThat;
 class EstabelecimentoControllerTest {
 
 
-    private static PostgreSQLContainer postgreSQLContainer;
+    private static ContainersForTest containersForTest;
+
     @Autowired
     private WebTestClient webTestClient;
 
     @BeforeAll
     static void beforeAll() {
-        postgreSQLContainer = new PostgreSQLContainer("postgres:15.3")
-                .withDatabaseName("cadastro")
-                .withUsername("cadastro")
-                .withPassword("cadastro");
-        postgreSQLContainer.withInitScript("init.sql");
-        postgreSQLContainer.start();
+        containersForTest = new ContainersForTest();
+        containersForTest.beforeAll();
     }
 
     @AfterAll
     static void afterAll() {
-        postgreSQLContainer.stop();
+        containersForTest.afterAll();
     }
 
     @DynamicPropertySource
     static void configureProperties(final DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
-        registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
+        containersForTest.configureProperties(registry);
     }
 
     @Test
     @DisplayName("Deve retornar BadRequest quando campo obrigatório não for informado")
-    void createEstabelecimentoBadRequest()  {
+    void createEstabelecimentoBadRequest() {
         final var estabelecimentoRequest = new EstabelecimentoRequest(null);
         webTestClient
                 .post()
@@ -65,16 +60,14 @@ class EstabelecimentoControllerTest {
                 .expectStatus()
                 .isBadRequest()
                 .expectBody()
-                .consumeWith(entityExchangeResult -> {
-                    assertThat(entityExchangeResult.getResponseBody())
-                            .asString()
-                            .contains("Invalid request content");
-                });
+                .consumeWith(entityExchangeResult -> assertThat(entityExchangeResult.getResponseBody())
+                        .asString()
+                        .contains("Invalid request content"));
     }
 
     @Test
     @DisplayName("Deve retornar BadRequest quando passar qualquer coisa no body")
-    void createEstabelecimentoBadRequestQualquerCoisa()  {
+    void createEstabelecimentoBadRequestQualquerCoisa() {
         webTestClient
                 .post()
                 .uri("/api/v1/estabelecimentos")
@@ -84,16 +77,14 @@ class EstabelecimentoControllerTest {
                 .expectStatus()
                 .isBadRequest()
                 .expectBody()
-                .consumeWith(entityExchangeResult -> {
-                    assertThat(entityExchangeResult.getResponseBody())
-                            .asString()
-                            .contains("Failed to read HTTP message", "JSON decoding error: Unrecognized token");
-                });
+                .consumeWith(entityExchangeResult -> assertThat(entityExchangeResult.getResponseBody())
+                        .asString()
+                        .contains("Failed to read HTTP message", "JSON decoding error: Unrecognized token"));
     }
 
     @Test
     @DisplayName("Deve retornar BadRequest quando não passar body")
-    void createEstabelecimentoBadRequestNoBody()  {
+    void createEstabelecimentoBadRequestNoBody() {
         webTestClient
                 .post()
                 .uri("/api/v1/estabelecimentos")
@@ -102,16 +93,14 @@ class EstabelecimentoControllerTest {
                 .expectStatus()
                 .isBadRequest()
                 .expectBody()
-                .consumeWith(entityExchangeResult -> {
-                    assertThat(entityExchangeResult.getResponseBody())
-                            .asString()
-                            .contains("No request body");
-                });
+                .consumeWith(entityExchangeResult -> assertThat(entityExchangeResult.getResponseBody())
+                        .asString()
+                        .contains("No request body"));
     }
 
     @Test
     @DisplayName("Deve criar estabelecimento corretamente")
-    void createEstabelecimentoCreated()  {
+    void createEstabelecimentoCreated() {
         final var estabelecimentoRequest = new EstabelecimentoRequest("estabelecimento");
         webTestClient
                 .post()
@@ -125,7 +114,7 @@ class EstabelecimentoControllerTest {
 
     @Test
     @DisplayName("Deve retornar NotFound quando passar uma rota não mapeada")
-    void createEstabelecimentoNotFoundRotaNaoMapeada()  {
+    void createEstabelecimentoNotFoundRotaNaoMapeada() {
         final var estabelecimentoRequest = new EstabelecimentoRequest("estabelecimento");
         webTestClient
                 .post()
@@ -136,11 +125,9 @@ class EstabelecimentoControllerTest {
                 .expectStatus()
                 .isNotFound()
                 .expectBody()
-                .consumeWith(entityExchangeResult -> {
-                    assertThat(entityExchangeResult.getResponseBody())
-                            .asString()
-                            .contains("404", "NOT_FOUND", "/qualquer");
-                });
+                .consumeWith(entityExchangeResult -> assertThat(entityExchangeResult.getResponseBody())
+                        .asString()
+                        .contains("404", "NOT_FOUND", "/qualquer"));
     }
 
 

@@ -3,12 +3,17 @@ package br.com.passella.cadastro.repository.impl;
 import br.com.passella.cadastro.domain.entity.EstabelecimentoEntity;
 import br.com.passella.cadastro.error.exception.PostgreSQLException;
 import br.com.passella.cadastro.error.exception.RepositoryException;
+import br.com.passella.cadastro.utils.ContainersForTest;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -24,6 +29,24 @@ class PostgreSQLEstabelecimentoRepositoryTest {
     @MockBean
     private JdbcTemplate jdbcTemplate;
     private final EstabelecimentoEntity entity = buildEstabelecimentoEntity();
+
+    private static ContainersForTest containersForTest;
+
+    @BeforeAll
+    static void beforeAll() {
+        containersForTest = new ContainersForTest();
+        containersForTest.beforeAll();
+    }
+
+    @AfterAll
+    static void afterAll() {
+        containersForTest.afterAll();
+    }
+
+    @DynamicPropertySource
+    static void configureProperties(final DynamicPropertyRegistry registry) {
+        containersForTest.configureProperties(registry);
+    }
 
     private EstabelecimentoEntity buildEstabelecimentoEntity() {
         final var estabelecimentoEntity = new EstabelecimentoEntity();
@@ -48,7 +71,7 @@ class PostgreSQLEstabelecimentoRepositoryTest {
 
     @Test
     @DisplayName("Deve apresentar erro quando não inserir registros")
-    void saveFalhaInsert() throws RepositoryException {
+    void saveFalhaInsert() {
         doReturn(0)
                 .when(jdbcTemplate)
                 .update(anyString(), anyString(), anyString());
@@ -57,11 +80,11 @@ class PostgreSQLEstabelecimentoRepositoryTest {
 
     @Test
     @DisplayName("Deve apresentar erro original")
-    void saveFalhaOriginalInsert() throws RepositoryException {
+    void saveFalhaOriginalInsert() {
         doThrow(new RuntimeException("Erro qualquer"))
                 .when(jdbcTemplate)
                 .update(anyString(), anyString(), anyString());
-        final RuntimeException runtimeException = assertThrows(RuntimeException.class, () -> cadastroRepository.save(entity));
+        final var runtimeException = assertThrows(RuntimeException.class, () -> cadastroRepository.save(entity));
         assertThat(runtimeException.getMessage()).isEqualTo("Erro qualquer");
     }
 

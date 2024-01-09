@@ -6,7 +6,7 @@ spring:
     password: ${FLYWAY_PASSWORD}
     baseline-on-migrate: true
     placeholders:
-      cadastro-password: ${DATASOURCE_PASSWORD}
+      cadastro-password: ${spring.datasource.password}
   kafka:
     bootstrap-servers: ${BOOTSTRAP_SERVERS}
   datasource:
