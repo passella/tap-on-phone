@@ -18,6 +18,7 @@ data:
   RATE_LIMIT_TIMEOUT_DURATION: "3"
   FLYWAY_URL: "jdbc:postgresql://postgresql.tap-on-phone-database:5432/postgres"
   FLYWAY_USER: "postgres"
+  MIGRATIONS_ENABLED: "true"
 kind: ConfigMap
 metadata:
   annotations:

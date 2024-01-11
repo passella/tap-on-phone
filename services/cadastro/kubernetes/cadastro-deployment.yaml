@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: cadastro
-          image: localhost:32000/service-cadastro:1.0.0
+          image: localhost:32000/service-cadastro:${CADASTRO_VERSION}
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
@@ -27,7 +27,7 @@ spec:
             - name: DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgresql-secret
+                  name: postgresql-cadastro-secret
                   key: POSTGRES_PASSWORD
             - name: FLYWAY_PASSWORD
               valueFrom:

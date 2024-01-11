@@ -4,12 +4,12 @@ import com.zaxxer.hikari.HikariDataSource;
 import jakarta.annotation.PostConstruct;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 import javax.sql.DataSource;
 
-@Profile("!no_flyway")
+@ConditionalOnProperty(name = "migrations.enabled", havingValue = "true")
 @Configuration
 public class FlywayConfig {
 

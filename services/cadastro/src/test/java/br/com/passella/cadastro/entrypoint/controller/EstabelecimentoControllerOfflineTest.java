@@ -8,13 +8,14 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.context.ImportTestcontainers;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ActiveProfiles("no_flyway")
+
 @SpringBootTest
 @AutoConfigureWebTestClient(timeout = "10000")
 @ImportTestcontainers
@@ -23,6 +24,11 @@ class EstabelecimentoControllerOfflineTest {
 
     @Autowired
     private WebTestClient webTestClient;
+
+    @DynamicPropertySource
+    static void configureProperties(final DynamicPropertyRegistry registry) {
+        registry.add("migrations.enabled", () -> false);
+    }
 
 
     @Test

@@ -31,3 +31,6 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
   show-actuator: true
+
+migrations:
+  enabled: ${MIGRATIONS_ENABLED}
