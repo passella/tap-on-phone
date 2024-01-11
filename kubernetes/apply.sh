@@ -24,6 +24,7 @@ docker tag service-cadastro:"$CADASTRO_VERSION" localhost:32000/service-cadastro
 docker push localhost:32000/service-cadastro:"$CADASTRO_VERSION"
 
 CADASTRO_VERSION="$CADASTRO_VERSION" envsubst < "$script_dir"/../services/cadastro/kubernetes/cadastro-deployment.yaml | kubectl apply -f -
+kubectl apply -f "$script_dir"/../services/cadastro/kubernetes/cadastro-autoscaling.yaml
 kubectl apply -f "$script_dir"/../services/cadastro/kubernetes/cadastro-service.yaml
 kubectl apply -f "$script_dir"/../services/cadastro/kubernetes/cadastro-ingress.yaml
 

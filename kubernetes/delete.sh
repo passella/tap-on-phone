@@ -6,6 +6,7 @@ echo "Removendo solução ..."
 
 kubectl delete -f "$script_dir"/../services/cadastro/kubernetes/cadastro-ingress.yaml
 kubectl delete -f "$script_dir"/../services/cadastro/kubernetes/cadastro-service.yaml
+kubectl delete -f "$script_dir"/../services/cadastro/kubernetes/cadastro-autoscaling.yaml
 kubectl delete -f "$script_dir"/../services/cadastro/kubernetes/cadastro-deployment.yaml
 kubectl delete -f "$script_dir"/../services/cadastro/kubernetes/postgresql-secret.yaml
 kubectl delete -f "$script_dir"/../services/cadastro/kubernetes/postgresql-postgres-secret.yaml
