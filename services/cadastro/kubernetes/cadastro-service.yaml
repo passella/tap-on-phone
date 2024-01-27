@@ -1,8 +1,6 @@
 apiVersion: v1
 kind: Service
 metadata:
-#  annotations:
-#    traefik.ingress.kubernetes.io/load-balancer-method: drr
   labels:
     app: cadastro
   name: cadastro
