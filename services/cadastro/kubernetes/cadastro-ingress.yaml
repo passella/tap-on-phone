@@ -4,8 +4,10 @@ metadata:
   labels:
     app: cadastro
   name: cadastro
-  namespace: tap-on-phone
+  annotations:
+    traefik.ingress.kubernetes.io/load-balancer-method: drr
 spec:
+  ingressClassName: traefik-ingress-class
   rules:
     - host: cadastro.localhost
       http:

@@ -1,3 +1,5 @@
+application:
+  version: @project.version@
 spring:
   flyway:
     enabled: false
@@ -34,3 +36,18 @@ springdoc:
 
 migrations:
   enabled: ${MIGRATIONS_ENABLED}
+
+management:
+  endpoint:
+    health:
+      group:
+        custom:
+          show-components: always
+          show-details: always
+          include:
+            - diskSpace
+            - ping
+            - cadastro
+      probes:
+        enabled: true
+      enabled: true

@@ -1,8 +1,7 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: database-storage-class
-  namespace: tap-on-phone-database
+  name: postgresql-storage-class
 provisioner: kubernetes.io/nfs
 reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer

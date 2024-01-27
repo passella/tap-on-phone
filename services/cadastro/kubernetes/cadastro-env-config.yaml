@@ -3,7 +3,7 @@ data:
   BIG_DATA_TOPIC: "big-data"
   BOOTSTRAP_SERVERS: "kafka:9092"
   DATASOURCE_DRIVER_CLASS: "org.postgresql.Driver"
-  DATASOURCE_URL: "jdbc:postgresql://postgresql.tap-on-phone-database:5432/cadastro"
+  DATASOURCE_URL: "jdbc:postgresql://postgresql.tap-on-phone-postgresql:5432/cadastro"
   DATASOURCE_USERNAME: "cadastro"
   DEAD_LETTER_TOPIC: "dead-letter"
   KAFKA_RETRIES: "3"
@@ -12,11 +12,11 @@ data:
   KAFKA_RETRIES_MULTIPLIER: "2"
   MONGO_DB_DATABASE: "pagamentos"
   MONGO_DB_HOST: "mongo"
-  RATE_LIMIT_LIMIT_FOR_PERIOD: "5"
-  RATE_LIMIT_LIMIT_REFRESH_PERIOD: "10"
-  RATE_LIMIT_MAX_CONCURRENT_CALLS: "2"
+  RATE_LIMIT_LIMIT_FOR_PERIOD: "1000"
+  RATE_LIMIT_LIMIT_REFRESH_PERIOD: "1"
+  RATE_LIMIT_MAX_CONCURRENT_CALLS: "500"
   RATE_LIMIT_TIMEOUT_DURATION: "3"
-  FLYWAY_URL: "jdbc:postgresql://postgresql.tap-on-phone-database:5432/postgres"
+  FLYWAY_URL: "jdbc:postgresql://postgresql.tap-on-phone-postgresql:5432/postgres"
   FLYWAY_USER: "postgres"
   MIGRATIONS_ENABLED: "true"
 kind: ConfigMap
@@ -25,4 +25,3 @@ metadata:
     kubectl.kubernetes.io/last-applied-configuration: |
       {}
   name: env-config
-  namespace: tap-on-phone

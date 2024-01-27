@@ -1,10 +1,9 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: database-persistent-volume-claim
-  namespace: tap-on-phone-database
+  name: postgresql-persistent-volume-claim
 spec:
-  storageClassName: database-storage-class
+  storageClassName: postgresql-storage-class
   accessModes:
     - ReadWriteOnce
   resources:

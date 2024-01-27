@@ -1,49 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cadastro
+  name: motor-pagamento
+  namespace: tap-on-phone
   labels:
-    app: cadastro
+    app: motor-pagamento
 spec:
   replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 0
+      maxSurge: 1
   selector:
     matchLabels:
-      app: cadastro
+      app: motor-pagamento
   template:
     metadata:
-      name: cadastro
+      name: motor-pagamento
       labels:
-        app: cadastro
+        app: motor-pagamento
     spec:
       containers:
-        - name: cadastro
-          image: localhost:32000/service-cadastro:${CADASTRO_VERSION}
+        - name: motor-pagamento
+          image: localhost:32000/service-motor-pagamento:${MOTOR_PAGAMENTO_VERSION}
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: env-config
           env:
-            - name: POR_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: POD_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
             - name: DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgresql-cadastro-secret
+                  name: postgresql-motor-pagamento-secret
                   key: POSTGRES_PASSWORD
             - name: FLYWAY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgresql-secret
+                  name: postgresql-postgres-secret
                   key: POSTGRES_PASSWORD
           resources:
             requests:
@@ -70,15 +64,4 @@ spec:
             periodSeconds: 5
             successThreshold: 1
             failureThreshold: 1
-            terminationGracePeriodSeconds: 15
-          startupProbe:
-            httpGet:
-              port: 8080
-              path: /actuator/health
-            initialDelaySeconds: 30
-            timeoutSeconds: 5
-            periodSeconds: 5
-            successThreshold: 1
-            failureThreshold: 1
-            terminationGracePeriodSeconds: 15
       restartPolicy: Always

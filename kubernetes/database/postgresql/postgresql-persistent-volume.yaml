@@ -1,10 +1,9 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: database-persistent-volume
-  namespace: tap-on-phone-database
+  name: postgresql-persistent-volume
 spec:
-  storageClassName: database-storage-class
+  storageClassName: postgresql-storage-class
   capacity:
     storage: 1Gi
   accessModes:
@@ -12,5 +11,5 @@ spec:
   persistentVolumeReclaimPolicy: Delete
   volumeMode: Filesystem
   hostPath:
-    path: "/mnt/database"
+    path: "/mnt/database/postgresql"
     type: DirectoryOrCreate

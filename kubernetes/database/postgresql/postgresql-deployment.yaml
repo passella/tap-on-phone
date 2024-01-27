@@ -2,7 +2,6 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: postgresql
-  namespace: tap-on-phone-database
 spec:
   replicas: 1
   selector:
@@ -16,7 +15,7 @@ spec:
       volumes:
         - name: postgresql-volume
           persistentVolumeClaim:
-            claimName: database-persistent-volume-claim
+            claimName: postgresql-persistent-volume-claim
       containers:
         - name: postgresql
           image: postgres:16.1
@@ -34,7 +33,7 @@ spec:
               cpu: '1'
               memory: 256Mi
             requests:
-              cpu: 512m
+              cpu: '1'
               memory: 256Mi
           volumeMounts:
             - name: postgresql-volume
