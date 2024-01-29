@@ -3,63 +3,63 @@ set -e
 
 script_dir=$(dirname $(realpath "$0"))
 namespace="tap-on-phone-services"
-namespace_blue="tap-on-phone-services-cadastro-blue"
-intervalo=5
 
-echo "Subindo cadastro ..."
+tag_version=$(cat "$script_dir"/../versao.txt)
+docker tag service-cadastro:"$tag_version" localhost:32000/service-cadastro:"$tag_version"
+docker push localhost:32000/service-cadastro:"$tag_version"
 
-CADASTRO_VERSION=$(cat "$script_dir"/../versao.txt)
-docker tag service-cadastro:"$CADASTRO_VERSION" localhost:32000/service-cadastro:"$CADASTRO_VERSION"
-docker push localhost:32000/service-cadastro:"$CADASTRO_VERSION"
+deployment_name=$(tag_version="$tag_version" envsubst <"$script_dir"/cadastro-deployment.yaml |
+  kubectl apply -f - --dry-run=client -o json |
+  jq -r '.metadata.name')
 
-if kubectl get namespaces | grep -c "$namespace_blue" >0; then
-  kubectl delete namespace "$namespace_blue" --wait
-  echo "Aguardando namespace $namespace_blue ser removido..."
-  while kubectl get namespaces | grep -c "$namespace_blue" >0; do
-    sleep "$intervalo"
-  done
+deployment_name_old=${deployment_name}-old
+
+if kubectl get deployments -n "$namespace" "$deployment_name_old" >/dev/null; then
+  kubectl -n "$namespace" delete deployment "$deployment_name_old"
 fi
 
-kubectl get namespace "$namespace_blue" || kubectl create namespace "$namespace_blue"
-kubectl apply -n "$namespace_blue" -f "$script_dir"/cadastro-env-config.yaml --wait
-kubectl apply -n "$namespace_blue" -f "$script_dir"/../../../kubernetes/database/postgresql/postgresql-secret.yaml --wait
-kubectl apply -n "$namespace_blue" -f "$script_dir"/postgresql-cadastro-secret.yaml --wait
-CADASTRO_VERSION="$CADASTRO_VERSION" envsubst <"$script_dir"/cadastro-deployment.yaml | kubectl apply -n "$namespace_blue" -f - --wait
-kubectl apply -n "$namespace_blue" -f "$script_dir"/cadastro-autoscaling.yaml --wait
-kubectl apply -n "$namespace_blue" -f "$script_dir"/cadastro-service.yaml --wait
-kubectl apply -n "$namespace_blue" -f "$script_dir"/cadastro-ingress.yaml --wait
+tag_version="$tag_version" envsubst <"$script_dir"/cadastro-deployment.yaml |
+  kubectl apply -n "$namespace" -f - --dry-run=client -o json |
+  jq ".spec.replicas = 1" |
+  jq ".metadata.name = \"$deployment_name_old\"" |
+  jq ".metadata.labels.app = \"$deployment_name_old\"" |
+  jq ".spec.selector.matchLabels.app = \"$deployment_name_old\"" |
+  jq ".spec.template.metadata.labels.app = \"$deployment_name_old\"" |
+  kubectl apply -n "$namespace" -f -
 
-while ! kubectl get pods -n "$namespace_blue" -l app=cadastro -o jsonpath='{.items[*].status.containerStatuses[*].ready}' | grep -q true; do
-  echo "Aguardando cadastro blue..."
-  sleep "$intervalo"
-done
+if ! kubectl -n "$namespace" rollout status deployment "$deployment_name_old"; then
+  echo "Rollout falhou devido ao timeout. Realizando rollback..."
+  if ! kubectl -n "$namespace" rollout undo deployment "$deployment_name_old"; then
+    kubectl delete -n "$namespace" deployment "$deployment_name_old"
+  fi
+  exit 1
+fi
 
-set +e
-"$script_dir"/delete.sh
-set -e
+sleep 10
 
-while kubectl get pods -n "$namespace" -l app=cadastro -o jsonpath='{.items[*].status.containerStatuses[*].ready}' | grep -q true; do
-  echo "Aguardando cadastro..."
-  sleep "$intervalo"
-done
+kubectl apply -n "$namespace" -f "$script_dir"/cadastro-service.yaml --dry-run=client -o json |
+  jq ".spec.selector.app = \"$deployment_name_old\"" |
+  kubectl apply -n "$namespace" -f -
 
-kubectl get namespace "$namespace" || kubectl create namespace "$namespace"
-kubectl apply -n "$namespace" -f "$script_dir"/cadastro-env-config.yaml --wait
-kubectl apply -n "$namespace" -f "$script_dir"/../../../kubernetes/database/postgresql/postgresql-secret.yaml --wait
-kubectl apply -n "$namespace" -f "$script_dir"/postgresql-cadastro-secret.yaml --wait
-CADASTRO_VERSION="$CADASTRO_VERSION" envsubst <"$script_dir"/cadastro-deployment.yaml | kubectl apply -n "$namespace" -f - --wait
-kubectl apply -n "$namespace" -f "$script_dir"/cadastro-autoscaling.yaml --wait
-kubectl apply -n "$namespace" -f "$script_dir"/cadastro-service.yaml --wait
-kubectl apply -n "$namespace" -f "$script_dir"/cadastro-ingress.yaml --wait
+kubectl apply -n "$namespace" -f "$script_dir"/cadastro-env-config.yaml
+kubectl apply -n "$namespace" -f "$script_dir"/../../../kubernetes/database/postgresql/postgresql-secret.yaml
+kubectl apply -n "$namespace" -f "$script_dir"/postgresql-cadastro-secret.yaml
 
-while ! kubectl get pods -n "$namespace" -l app=cadastro -o jsonpath='{.items[*].status.containerStatuses[*].ready}' | grep -q true; do
-  echo "Aguardando cadastro..."
-  sleep "$intervalo"
-done
+tag_version="$tag_version" envsubst <"$script_dir"/cadastro-deployment.yaml |
+  kubectl apply -n "$namespace" -f -
 
-set +e
-kubectl delete -n "$namespace_blue" -f "$script_dir"/cadastro-ingress.yaml --wait
-kubectl delete namespace "$namespace_blue" --wait
-set -e
+if ! kubectl -n "$namespace" rollout status -f "$script_dir"/cadastro-deployment.yaml; then
+  echo "Rollout falhou devido ao timeout. Realizando rollback..."
+  kubectl -n "$namespace" rollout undo deployment "$deployment_name"
+  exit 1
+fi
+
+sleep 10
+
+kubectl apply -n "$namespace" -f "$script_dir"/cadastro-autoscaling.yaml
+kubectl apply -n "$namespace" -f "$script_dir"/cadastro-service.yaml
+kubectl apply -n "$namespace" -f "$script_dir"/cadastro-ingress.yaml
+
+kubectl delete -n "$namespace" deployment "$deployment_name_old"
 
 echo "Cadastro pronto para uso"

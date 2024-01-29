@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: cadastro
-          image: localhost:32000/service-cadastro:${CADASTRO_VERSION}
+          image: localhost:32000/service-cadastro:${tag_version}
           imagePullPolicy: Always
           envFrom:
             - configMapRef:

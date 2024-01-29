@@ -8,7 +8,7 @@ spec:
     kind: Deployment
     name: cadastro
     apiVersion: apps/v1
-  minReplicas: 2
+  minReplicas: 1
   behavior:
     scaleUp:
       stabilizationWindowSeconds: 15
