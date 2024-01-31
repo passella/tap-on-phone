@@ -14,32 +14,36 @@ deployment_name=$(tag_version="$tag_version" envsubst <"$script_dir"/cadastro-de
 
 deployment_name_old=${deployment_name}-old
 
-if kubectl get deployments -n "$namespace" "$deployment_name_old" >/dev/null; then
-  kubectl -n "$namespace" delete deployment "$deployment_name_old"
-fi
+kubectl create namespace "$namespace" || true
 
-tag_version="$tag_version" envsubst <"$script_dir"/cadastro-deployment.yaml |
-  kubectl apply -n "$namespace" -f - --dry-run=client -o json |
-  jq ".spec.replicas = 1" |
-  jq ".metadata.name = \"$deployment_name_old\"" |
-  jq ".metadata.labels.app = \"$deployment_name_old\"" |
-  jq ".spec.selector.matchLabels.app = \"$deployment_name_old\"" |
-  jq ".spec.template.metadata.labels.app = \"$deployment_name_old\"" |
-  kubectl apply -n "$namespace" -f -
-
-if ! kubectl -n "$namespace" rollout status deployment "$deployment_name_old"; then
-  echo "Rollout falhou devido ao timeout. Realizando rollback..."
-  if ! kubectl -n "$namespace" rollout undo deployment "$deployment_name_old"; then
-    kubectl delete -n "$namespace" deployment "$deployment_name_old"
+if kubectl -n "$namespace" get -f "$script_dir"/cadastro-deployment.yaml; then
+  if kubectl get deployments -n "$namespace" "$deployment_name_old" >/dev/null; then
+    kubectl -n "$namespace" delete deployment "$deployment_name_old"
   fi
-  exit 1
+
+  tag_version="$tag_version" envsubst <"$script_dir"/cadastro-deployment.yaml |
+    kubectl apply -n "$namespace" -f - --dry-run=client -o json |
+    jq ".spec.replicas = 1" |
+    jq ".metadata.name = \"$deployment_name_old\"" |
+    jq ".metadata.labels.app = \"$deployment_name_old\"" |
+    jq ".spec.selector.matchLabels.app = \"$deployment_name_old\"" |
+    jq ".spec.template.metadata.labels.app = \"$deployment_name_old\"" |
+    kubectl apply -n "$namespace" -f -
+
+  if ! kubectl -n "$namespace" rollout status deployment "$deployment_name_old"; then
+    echo "Rollout falhou devido ao timeout. Realizando rollback..."
+    if ! kubectl -n "$namespace" rollout undo deployment "$deployment_name_old"; then
+      kubectl delete -n "$namespace" deployment "$deployment_name_old"
+    fi
+    exit 1
+  fi
+
+  sleep 10
+
+  kubectl apply -n "$namespace" -f "$script_dir"/cadastro-service.yaml --dry-run=client -o json |
+    jq ".spec.selector.app = \"$deployment_name_old\"" |
+    kubectl apply -n "$namespace" -f -
 fi
-
-sleep 10
-
-kubectl apply -n "$namespace" -f "$script_dir"/cadastro-service.yaml --dry-run=client -o json |
-  jq ".spec.selector.app = \"$deployment_name_old\"" |
-  kubectl apply -n "$namespace" -f -
 
 kubectl apply -n "$namespace" -f "$script_dir"/cadastro-env-config.yaml
 kubectl apply -n "$namespace" -f "$script_dir"/../../../kubernetes/database/postgresql/postgresql-secret.yaml
@@ -60,6 +64,8 @@ kubectl apply -n "$namespace" -f "$script_dir"/cadastro-autoscaling.yaml
 kubectl apply -n "$namespace" -f "$script_dir"/cadastro-service.yaml
 kubectl apply -n "$namespace" -f "$script_dir"/cadastro-ingress.yaml
 
-kubectl delete -n "$namespace" deployment "$deployment_name_old"
+if kubectl -n "$namespace" get deployment "$deployment_name_old"; then
+  kubectl delete -n "$namespace" deployment "$deployment_name_old"
+fi
 
 echo "Cadastro pronto para uso"

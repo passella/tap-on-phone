@@ -5,9 +5,8 @@
 /.m2-cache/
 /service-cadastro-builder.log
 /services/cadastro/kubernetes/postgresql-postgres-secret.yaml
-/build/.buid-output/
-/build/.m2-cache/
+/**/.buid-output/
+/**/.m2-cache/
 /**/pom.xml.versionsBackup
 /services/cadastro/versao.txt
 /services/motor-pagamento/versao.txt
-/0
