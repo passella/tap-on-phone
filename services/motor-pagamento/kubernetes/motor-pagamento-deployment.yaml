@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: motor-pagamento
-  namespace: tap-on-phone
   labels:
     app: motor-pagamento
 spec:
@@ -23,22 +22,11 @@ spec:
     spec:
       containers:
         - name: motor-pagamento
-          image: localhost:32000/service-motor-pagamento:${MOTOR_PAGAMENTO_VERSION}
+          image: localhost:32000/service-motor-pagamento:${tag_version}
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: env-config
-          env:
-            - name: DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgresql-motor-pagamento-secret
-                  key: POSTGRES_PASSWORD
-            - name: FLYWAY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgresql-postgres-secret
-                  key: POSTGRES_PASSWORD
+                name: motor-pagamento-env-config
           resources:
             requests:
               memory: "256Mi"

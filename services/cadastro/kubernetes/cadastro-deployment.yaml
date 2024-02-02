@@ -25,7 +25,7 @@ spec:
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: env-config
+                name: cadastro-env-config
           env:
             - name: POR_NAMESPACE
               valueFrom:
