@@ -53,7 +53,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler i
     public Mono<ResponseEntity<Object>> handleRuntimeException(final RuntimeException ex, final ServerWebExchange exchange) {
         logger.log(Level.SEVERE, ex.toString(), ex);
         final var errors = getThrowableList(ex).stream().map(Throwable::toString).toList();
-        final Mono<ResponseEntity<Object>> responseEntityMono = buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, ex.toString(), errors, exchange);
+        final var responseEntityMono = buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, ex.toString(), errors, exchange);
         deadLetterService.send(responseEntityMono);
         return responseEntityMono;
     }
@@ -63,7 +63,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler i
     public Mono<ResponseEntity<Object>> handlePostgreSQLNotFoundException(final PostgreSQLNotFoundException ex, final ServerWebExchange exchange) {
         logger.log(Level.SEVERE, ex.toString(), ex);
         final var errors = List.of(ex.toString());
-        final Mono<ResponseEntity<Object>> responseEntityMono = buildResponseEntity(HttpStatus.NOT_FOUND, ex.toString(), errors, exchange);
+        final var responseEntityMono = buildResponseEntity(HttpStatus.NOT_FOUND, ex.toString(), errors, exchange);
         deadLetterService.send(responseEntityMono);
         return responseEntityMono;
     }
@@ -98,7 +98,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler i
                 .stream()
                 .map(fieldError -> MessageFormat.format("{0}: {1}", fieldError.getField(), fieldError.getDefaultMessage()))
                 .toList();
-        final Mono<ResponseEntity<Object>> responseEntityMono = buildResponseEntity(HttpStatus.valueOf(status.value()), ex.getBody().getDetail(), errors, exchange);
+        final var responseEntityMono = buildResponseEntity(HttpStatus.valueOf(status.value()), ex.getBody().getDetail(), errors, exchange);
         deadLetterService.send(responseEntityMono);
         return responseEntityMono;
     }
@@ -107,7 +107,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler i
     protected Mono<ResponseEntity<Object>> handleExceptionInternal(final Exception ex, final Object body, final HttpHeaders headers, final HttpStatusCode status, final ServerWebExchange exchange) {
         logger.log(Level.SEVERE, ex.toString(), ex);
         final var errors = getThrowableList(ex).stream().map(Throwable::toString).toList();
-        final Mono<ResponseEntity<Object>> responseEntityMono = buildResponseEntity(HttpStatus.valueOf(status.value()), ex.toString(), errors, exchange);
+        final var responseEntityMono = buildResponseEntity(HttpStatus.valueOf(status.value()), ex.toString(), errors, exchange);
         deadLetterService.send(responseEntityMono);
         return responseEntityMono;
     }
@@ -115,7 +115,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler i
     @ExceptionHandler({BulkheadFullException.class, RequestNotPermitted.class})
     public Mono<ResponseEntity<Object>> handleBulkheadFullException(final RuntimeException ex, final ServerWebExchange exchange) {
         logger.warning(ex.toString());
-        final Mono<ResponseEntity<Object>> responseEntityMono = buildResponseEntity(HttpStatus.TOO_MANY_REQUESTS, ex, exchange);
+        final var responseEntityMono = buildResponseEntity(HttpStatus.TOO_MANY_REQUESTS, ex, exchange);
         deadLetterService.send(responseEntityMono);
         return responseEntityMono;
     }

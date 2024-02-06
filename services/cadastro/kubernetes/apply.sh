@@ -46,7 +46,7 @@ if kubectl -n "$namespace" get -f "$script_dir"/cadastro-deployment.yaml; then
 fi
 
 kubectl apply -n "$namespace" -f "$script_dir"/cadastro-env-config.yaml
-kubectl apply -n "$namespace" -f "$script_dir"/../../../kubernetes/database/postgresql/postgresql-secret.yaml
+kubectl apply -n "$namespace" -f "$script_dir"/postgresql-secret.yaml
 kubectl apply -n "$namespace" -f "$script_dir"/postgresql-cadastro-secret.yaml
 
 tag_version="$tag_version" envsubst <"$script_dir"/cadastro-deployment.yaml |

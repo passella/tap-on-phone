@@ -10,7 +10,7 @@
     </parent>
     <groupId>br.com.passella</groupId>
     <artifactId>motor-pagamento</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <name>motor-pagamento</name>
     <description>motor-pagamento</description>
     <properties>

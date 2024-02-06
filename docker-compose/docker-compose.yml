@@ -2,7 +2,7 @@ version: '3.8'
 services:
   postgresql:
     build:
-      context: ../infra/postgresql
+      context: ../infra/docker-compose/postgresql
     image: postgresql-cadastro
     restart: always
     container_name: postgresql-cadastro

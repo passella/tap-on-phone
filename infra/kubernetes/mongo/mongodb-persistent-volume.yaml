@@ -1,9 +1,9 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: postgresql-persistent-volume
+  name: mongodb-persistent-volume
 spec:
-  storageClassName: postgresql-storage-class
+  storageClassName: mongodb-storage-class
   capacity:
     storage: 1Gi
   accessModes:
@@ -11,5 +11,5 @@ spec:
   persistentVolumeReclaimPolicy: Delete
   volumeMode: Filesystem
   hostPath:
-    path: "/mnt/database/postgresql"
+    path: "/mnt/kubernetes/database/mongodb"
     type: DirectoryOrCreate

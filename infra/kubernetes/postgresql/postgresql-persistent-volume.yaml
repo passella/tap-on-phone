@@ -1,0 +1,15 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: postgresql-persistent-volume
+spec:
+  storageClassName: postgresql-storage-class
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  volumeMode: Filesystem
+  hostPath:
+    path: "/mnt/kubernetes/database/postgresql"
+    type: DirectoryOrCreate

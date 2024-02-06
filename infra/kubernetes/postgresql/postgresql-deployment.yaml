@@ -39,8 +39,3 @@ spec:
             - name: postgresql-volume
               mountPath: /var/lib/postgresql/data
       restartPolicy: Always
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 25%
-      maxSurge: 25%

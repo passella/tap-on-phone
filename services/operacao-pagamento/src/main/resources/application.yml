@@ -6,11 +6,11 @@ spring:
       client:
         config:
           dadosPagamento-service:
-            url: http://cadastro:8080/api/v1/devices/
+            url: ${DADOS_PAGAMENTO_SERVICE_URL}
   data:
     redis:
-      host: redis
-      port: 6379
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
 
 rate-limit:
   limitRefreshPeriod: 10

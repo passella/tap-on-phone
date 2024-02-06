@@ -1,0 +1,31 @@
+kind: HorizontalPodAutoscaler
+apiVersion: autoscaling/v2
+metadata:
+  name: motor-pagamento
+spec:
+  maxReplicas: 3
+  scaleTargetRef:
+    kind: Deployment
+    name: motor-pagamento
+    apiVersion: apps/v1
+  minReplicas: 1
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 15
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 15
+    scaleDown:
+      stabilizationWindowSeconds: 30
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 30
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50

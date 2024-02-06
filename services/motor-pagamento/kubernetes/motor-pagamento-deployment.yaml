@@ -27,6 +27,12 @@ spec:
           envFrom:
             - configMapRef:
                 name: motor-pagamento-env-config
+          env:
+            - name: MONGO_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-motor-pagamento-secret
+                  key: MONGO_PASSWORD
           resources:
             requests:
               memory: "256Mi"
@@ -34,22 +40,4 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "0.5"
-          readinessProbe:
-            httpGet:
-              port: 8080
-              path: /actuator/health
-            initialDelaySeconds: 30
-            timeoutSeconds: 5
-            periodSeconds: 5
-            successThreshold: 1
-            failureThreshold: 1
-          livenessProbe:
-            httpGet:
-              port: 8080
-              path: /actuator/health
-            initialDelaySeconds: 30
-            timeoutSeconds: 5
-            periodSeconds: 5
-            successThreshold: 1
-            failureThreshold: 1
       restartPolicy: Always

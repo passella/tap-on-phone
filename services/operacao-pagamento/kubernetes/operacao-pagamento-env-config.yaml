@@ -3,8 +3,8 @@ data:
   BIG_DATA_TOPIC: "big-data"
   BOOTSTRAP_SERVERS: "kafka.tap-on-phone-kafka:9092"
   DATASOURCE_DRIVER_CLASS: "org.postgresql.Driver"
-  DATASOURCE_URL: "jdbc:postgresql://postgresql.tap-on-phone-postgresql:5432/cadastro"
-  DATASOURCE_USERNAME: "cadastro"
+  DATASOURCE_URL: "jdbc:postgresql://postgresql.tap-on-phone-postgresql:5432/operacao-pagamento"
+  DATASOURCE_USERNAME: "operacao-pagamento"
   DEAD_LETTER_TOPIC: "dead-letter"
   KAFKA_RETRIES: "3"
   KAFKA_RETRIES_INITIAL: "1000"
@@ -19,9 +19,12 @@ data:
   FLYWAY_URL: "jdbc:postgresql://postgresql.tap-on-phone-postgresql:5432/postgres"
   FLYWAY_USER: "postgres"
   MIGRATIONS_ENABLED: "true"
+  REDIS_HOST: "redis.tap-on-phone-redis"
+  REDIS_PORT: "6379"
+  DADOS_PAGAMENTO_SERVICE_URL: "http://cadastro.tap-on-phone-services/api/v1/devices/"
 kind: ConfigMap
 metadata:
   annotations:
     kubectl.kubernetes.io/last-applied-configuration: |
       {}
-  name: cadastro-env-config
+  name: operacao-pagamento-env-config

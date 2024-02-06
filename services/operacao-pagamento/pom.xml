@@ -10,12 +10,13 @@
 	</parent>
 	<groupId>br.com.passella</groupId>
 	<artifactId>operacao-pagamento</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.3</version>
 	<name>operacao-pagamento</name>
 	<description>operacao-pagamento</description>
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2022.0.4</spring-cloud.version>
+		<app.version>${project.version}</app.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -112,10 +113,16 @@
 	</dependencyManagement>
 
 	<build>
+		<finalName>app</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.4.0</version>
 			</plugin>
 		</plugins>
 	</build>
