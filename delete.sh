@@ -4,6 +4,7 @@ script_dir=$(dirname $(realpath "$0"))
 
 echo "Removendo solução ..."
 
+"$script_dir"/services/pagamento/kubernetes/delete.sh
 "$script_dir"/services/operacao-pagamento/kubernetes/delete.sh
 "$script_dir"/services/motor-pagamento/kubernetes/delete.sh
 "$script_dir"/services/cadastro/kubernetes/delete.sh

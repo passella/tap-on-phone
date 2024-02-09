@@ -3,11 +3,14 @@ spring:
     bootstrap-servers: ${BOOTSTRAP_SERVERS}
   data:
     mongodb:
-      database: pagamentos
-      host: mongo
+      database: ${MONGO_DB_DATABASE}
+      host: ${MONGO_DB_HOST}
+      username: ${MONGO_DB_USERNAME}
+      password: ${MONGO_DB_PASSWORD}
+      authenticationDatabase: admin
     redis:
-      host: redis
-      port: 6379
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
 
 rate-limit:
   limitRefreshPeriod: 10
@@ -21,7 +24,6 @@ springdoc:
   show-actuator: true
 
 dead-letter:
-  topic: "dead-letter"
-
+  topic: ${DEAD_LETTER_TOPIC}
 big-data:
-  topic: "big-data"
+  topic: ${BIG_DATA_TOPIC}

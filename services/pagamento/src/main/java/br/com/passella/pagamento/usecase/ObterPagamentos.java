@@ -14,7 +14,7 @@ import java.util.List;
 
 @Component
 public class ObterPagamentos {
-    
+
     private final PagamentosRepository pagamentosRepository;
     private final ObterPagamentosConverter obterPagamentosConverter;
 
@@ -29,12 +29,13 @@ public class ObterPagamentos {
                 .flatMap(pagamentoEntity -> Mono.just(obterPagamentosConverter.toOutput(pagamentoEntity)))
                 .switchIfEmpty(Mono.error(new MongoDBNotFoundException("Não foram encontrados pagamentos para o estabelecimento: " + input.id())));
     }
-    
+
     public record ObterPagamentosInput(String id){}
     public record ObterPagamentosOutput(
             String idPagamento,
             DadosPagamento dadosPagamento,
             StatusPagamento statusPagamento,
             List<HistoricoPagamento> historico
-    ){}
+    ) {
+    }
 }
