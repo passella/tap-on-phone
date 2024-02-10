@@ -14,5 +14,6 @@ echo "Subindo solução ..."
 "$script_dir"/services/cadastro/kubernetes/apply.sh
 "$script_dir"/services/motor-pagamento/kubernetes/apply.sh
 "$script_dir"/services/operacao-pagamento/kubernetes/apply.sh
+"$script_dir"/services/gateway/kubernetes/apply.sh
 
 echo "Solução pronta para uso"

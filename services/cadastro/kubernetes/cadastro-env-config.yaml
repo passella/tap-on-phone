@@ -21,7 +21,4 @@ data:
   MIGRATIONS_ENABLED: "true"
 kind: ConfigMap
 metadata:
-  annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {}
   name: cadastro-env-config

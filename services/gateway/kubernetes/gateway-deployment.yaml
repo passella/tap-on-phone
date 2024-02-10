@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cadastro
+  name: gateway
   labels:
-    app: cadastro
+    app: gateway
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cadastro
+      app: gateway
   template:
     metadata:
-      name: cadastro
+      name: gateway
       labels:
-        app: cadastro
+        app: gateway
     spec:
       automountServiceAccountToken: false
       containers:
-        - name: cadastro
-          image: localhost:32000/service-cadastro:${tag_version}
+        - name: gateway
+          image: localhost:32000/service-gateway:${tag_version}
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: cadastro-env-config
+                name: gateway-env-config
           env:
             - name: POR_NAMESPACE
               valueFrom:
@@ -32,16 +32,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            - name: DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgresql-cadastro-secret
-                  key: POSTGRES_PASSWORD
-            - name: FLYWAY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgresql-secret
-                  key: POSTGRES_PASSWORD
           resources:
             requests:
               memory: "256Mi"

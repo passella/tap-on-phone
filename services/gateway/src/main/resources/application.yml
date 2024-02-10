@@ -1,7 +1,7 @@
 rotas:
-  cadastro: http://cadastro:8080/
-  operacao-pagamento: http://operacao-pagamento:8080/
-  pagamento: http://pagamento:8080/
+  cadastro: ${ROTAS_CADASTRO}
+  operacao-pagamento: ${ROTAS_OPERACAO_PAGAMENTO}
+  pagamento: ${ROTAS_PAGAMENTO}
 
 management:
   endpoints:

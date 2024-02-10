@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: gateway
+  name: gateway
+  annotations:
+    traefik.ingress.kubernetes.io/load-balancer-method: drr
+spec:
+  ingressClassName: traefik-ingress-class
+  rules:
+    - host: gateway.localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gateway
+                port:
+                  number: 80

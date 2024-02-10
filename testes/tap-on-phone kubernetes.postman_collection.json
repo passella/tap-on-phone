@@ -1,0 +1,287 @@
+{
+	"info": {
+		"_postman_id": "1128fea0-de14-4a6b-bfa1-63aa85aee9a5",
+		"name": "tap-on-phone kubernetes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "885360"
+	},
+	"item": [
+		{
+			"name": "Criar Estabelecimento",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"id_loja\", pm.response.json().id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nome\": \"Estabelecimento\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://gateway.localhost/cadastro/api/v1/estabelecimentos",
+					"protocol": "http",
+					"host": [
+						"gateway",
+						"localhost"
+					],
+					"path": [
+						"cadastro",
+						"api",
+						"v1",
+						"estabelecimentos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criar Device",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"id_device\", pm.response.json().id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nome\": \"Device\",\n    \"estabelecimentos\": [\n        \"{{id_loja}}\" \n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://gateway.localhost/cadastro/api/v1/devices",
+					"protocol": "http",
+					"host": [
+						"gateway",
+						"localhost"
+					],
+					"path": [
+						"cadastro",
+						"api",
+						"v1",
+						"devices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Device",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://gateway.localhost/cadastro/api/v1/devices/:id",
+					"protocol": "http",
+					"host": [
+						"gateway",
+						"localhost"
+					],
+					"path": [
+						"cadastro",
+						"api",
+						"v1",
+						"devices",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{id_device}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criar Pagamento",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"id_pagamento\", pm.response.json().id_pagamento);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_device\": \"{{id_device}}\",\n    \"valor\": 50.89\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://gateway.localhost/operacao-pagamento/api/v1/pagamentos",
+					"protocol": "http",
+					"host": [
+						"gateway",
+						"localhost"
+					],
+					"path": [
+						"operacao-pagamento",
+						"api",
+						"v1",
+						"pagamentos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cancelar Pagamento",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_pagamento\": \"{{id_pagamento}}\",\n    \"status\": \"CANCELADO\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://gateway.localhost/operacao-pagamento/api/v1/pagamentos",
+					"protocol": "http",
+					"host": [
+						"gateway",
+						"localhost"
+					],
+					"path": [
+						"operacao-pagamento",
+						"api",
+						"v1",
+						"pagamentos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Confirmar Pagamento",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_pagamento\": \"{{id_pagamento}}\",\n    \"status\": \"CONFIRMADO\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://gateway.localhost/operacao-pagamento/api/v1/pagamentos",
+					"protocol": "http",
+					"host": [
+						"gateway",
+						"localhost"
+					],
+					"path": [
+						"operacao-pagamento",
+						"api",
+						"v1",
+						"pagamentos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Desfazer Pagamento",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_pagamento\": \"{{id_pagamento}}\",\n    \"status\": \"DESFEITO\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://gateway.localhost/operacao-pagamento/api/v1/pagamentos",
+					"protocol": "http",
+					"host": [
+						"gateway",
+						"localhost"
+					],
+					"path": [
+						"operacao-pagamento",
+						"api",
+						"v1",
+						"pagamentos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obter Pagamentos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://gateway.localhost/pagamento/api/v1/pagamentos/:id",
+					"protocol": "http",
+					"host": [
+						"gateway",
+						"localhost"
+					],
+					"path": [
+						"pagamento",
+						"api",
+						"v1",
+						"pagamentos",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{id_loja}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
