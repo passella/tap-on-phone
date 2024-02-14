@@ -10,10 +10,13 @@ echo "Subindo solução ..."
 "$script_dir"/infra/kubernetes/postgresql/apply.sh
 "$script_dir"/infra/kubernetes/mongo/apply.sh
 "$script_dir"/infra/kubernetes/redis/apply.sh
+
 "$script_dir"/services/pagamento/kubernetes/apply.sh
 "$script_dir"/services/cadastro/kubernetes/apply.sh
 "$script_dir"/services/motor-pagamento/kubernetes/apply.sh
 "$script_dir"/services/operacao-pagamento/kubernetes/apply.sh
 "$script_dir"/services/gateway/kubernetes/apply.sh
+
+"$script_dir"/infra/kubernetes/observabilidade/elasticsearch/apply.sh
 
 echo "Solução pronta para uso"
